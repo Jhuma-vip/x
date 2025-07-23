@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AX HUB - Anime Video Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff0099;
+            --secondary: #00ccff;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --light: #f0f0ff;
+            --accent: #ffcc00;
+            --neon-glow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23ff0099" fill-opacity="0.1"/></svg>');
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: var(--neon-glow);
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .admin-btn {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 153, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(255, 0, 153, 0.8);
+        }
+
+        .admin-btn i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 30px;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow-y: auto;
+        }
+
+        .admin-panel.active {
+            right: 0;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-shadow: var(--neon-glow);
+        }
+
+        .close-panel {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-panel:hover {
+            color: var(--primary);
+        }
+
+        .password-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 0, 153, 0.5);
+        }
+
+        .password-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .password-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 153, 0.4);
+        }
+
+        .upload-area {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--secondary);
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .upload-area.active {
+            display: block;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 153, 0.4);
+        }
+
+        .upload-info {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .upload-info.active {
+            display: block;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s;
+        }
+
+        .video-card:hover .video-thumbnail {
+            transform: scale(1.05);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 0, 153, 0.6);
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 0, 153, 0.8);
+        }
+
+        .play-btn i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .video-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .video-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--light);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .video-meta {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .video-meta i {
+            color: var(--secondary);
+            margin-right: 5px;
+        }
+
+        .video-menu {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-card:hover .video-menu {
+            opacity: 1;
+        }
+
+        .menu-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .menu-content {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: rgba(10, 10, 26, 0.95);
+            border-radius: 10px;
+            padding: 10px 0;
+            min-width: 120px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .menu-content.active {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .menu-item i {
+            font-size: 1rem;
+        }
+
+        .video-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+
+        .video-player.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .player-container {
+            width: 80%;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        .close-player {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-player:hover {
+            color: var(--primary);
+        }
+
+        video {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 0, 153, 0.5);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s;
+            z-index: 3000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .anime-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23ff0099" fill-opacity="0.1"/></svg>');
+            background-size: 50px 50px;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        /* Admin Upload Form Styles */
+        .upload-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .upload-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 0, 153, 0.5);
+        }
+
+        .submit-upload {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-upload:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 153, 0.4);
+        }
+
+        .thumbnail-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .thumbnail-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-preview-text {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .thumbnail-upload-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .thumbnail-upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 153, 0.4);
+        }
+
+        .thumbnail-upload-btn i {
+            font-size: 1rem;
+        }
+
+        .delete-confirmation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(10, 10, 26, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            z-index: 2500;
+            width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .delete-confirmation.active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .delete-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .delete-message {
+            margin-bottom: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .delete-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #ff3366, #ff0033);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        .cancel-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="anime-pattern"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">AX<span>HUB</span></div>
+            <div class="admin-btn" id="adminBtn">
+                <i class="fas fa-cog"></i>
+            </div>
+        </header>
+        
+        <div class="video-grid" id="videoGrid">
+            <!-- Video slots will be dynamically generated here -->
+        </div>
+    </div>
+    
+    <div class="admin-panel" id="adminPanel">
+        <div class="panel-header">
+            <h2 class="panel-title">Admin Panel</h2>
+            <button class="close-panel" id="closePanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="password-form" id="passwordForm">
+            <h3>Admin Access</h3>
+            <p>Enter password to access upload functionality</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="Enter admin password">
+            <button id="verifyPassword" class="password-btn">Verify</button>
+        </div>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="upload-text">Drag & drop your video here or click to browse</p>
+            <button class="upload-btn" id="uploadBtn">Select MP4 File</button>
+            <input type="file" id="fileInput" accept="video/mp4" style="display: none;">
+        </div>
+        
+        <div class="upload-form" id="uploadForm">
+            <div class="form-group">
+                <label class="form-label" for="videoTitle">Video Title</label>
+                <input type="text" id="videoTitle" class="form-input" placeholder="Enter video title">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="thumbnailUpload">Thumbnail Image</label>
+                <button class="thumbnail-upload-btn" id="thumbnailUploadBtn">
+                    <i class="fas fa-image"></i> Select Thumbnail
+                </button>
+                <input type="file" id="thumbnailInput" accept="image/*" style="display: none;">
+                <div class="thumbnail-preview" id="thumbnailPreview">
+                    <p class="thumbnail-preview-text">Thumbnail preview will appear here</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="thumbnailUrl">Thumbnail URL (Optional)</label>
+                <input type="text" id="thumbnailUrl" class="form-input" placeholder="Enter thumbnail URL or leave blank for random">
+            </div>
+            
+            <button id="submitUpload" class="submit-upload">Upload Video</button>
+        </div>
+        
+        <div class="upload-info" id="uploadInfo">
+            <h3>Uploaded Videos</h3>
+            <p>All uploaded videos will appear in the video grid instantly.</p>
+            <p>Only you (admin) can upload videos. Users can only watch.</p>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="delete-confirmation" id="deleteConfirmation">
+        <h3 class="delete-title">Delete Video</h3>
+        <p class="delete-message">Are you sure you want to delete this video? This action cannot be undone.</p>
+        <div class="delete-actions">
+            <button class="delete-btn" id="confirmDelete">Delete</button>
+            <button class="cancel-btn" id="cancelDelete">Cancel</button>
+        </div>
+    </div>
+    
+    <div class="video-player" id="videoPlayer">
+        <div class="player-container">
+            <button class="close-player" id="closePlayer">
+                <i class="fas fa-times"></i>
+            </button>
+            <video id="player" controls></video>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Video uploaded successfully!
+    </div>
+
+    <script>
+        // DOM Elements
+        const adminBtn = document.getElementById('adminBtn');
+        const adminPanel = document.getElementById('adminPanel');
+        const closePanel = document.getElementById('closePanel');
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const verifyPassword = document.getElementById('verifyPassword');
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadInfo = document.getElementById('uploadInfo');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const videoGrid = document.getElementById('videoGrid');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const player = document.getElementById('player');
+        const closePlayer = document.getElementById('closePlayer');
+        const notification = document.getElementById('notification');
+        const videoTitle = document.getElementById('videoTitle');
+        const thumbnailUrl = document.getElementById('thumbnailUrl');
+        const thumbnailPreview = document.getElementById('thumbnailPreview');
+        const submitUpload = document.getElementById('submitUpload');
+        const thumbnailUploadBtn = document.getElementById('thumbnailUploadBtn');
+        const thumbnailInput = document.getElementById('thumbnailInput');
+        const overlay = document.getElementById('overlay');
+        const deleteConfirmation = document.getElementById('deleteConfirmation');
+        const confirmDelete = document.getElementById('confirmDelete');
+        const cancelDelete = document.getElementById('cancelDelete');
+        
+        // Admin password (in a real app, this would be server-side)
+        const ADMIN_PASSWORD = "admin123";
+        
+        // Load videos from localStorage or use sample data
+        let videos = JSON.parse(localStorage.getItem('axHubVideos')) || [
+            {
+                id: 'video-1',
+                title: "Naruto Shippuden - Episode 1",
+                thumbnail: "https://picsum.photos/seed/anime1/600/400.jpg",
+                duration: "23:45",
+                views: "1.2M",
+                url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
+            },
+            {
+                id: 'video-2',
+                title: "My Hero Academia - Season 6",
+                thumbnail: "https://picsum.photos/seed/anime2/600/400.jpg",
+                duration: "24:10",
+                views: "950K",
+                url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4"
+            },
+            {
+                id: 'video-3',
+                title: "Demon Slayer - Mugen Train Arc",
+                thumbnail: "https://picsum.photos/seed/anime3/600/400.jpg",
+                duration: "48:22",
+                views: "2.3M",
+                url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4"
+            },
+            {
+                id: 'video-4',
+                title: "Attack on Titan - Final Season",
+                thumbnail: "https://picsum.photos/seed/anime4/600/400.jpg",
+                duration: "45:15",
+                views: "1.8M",
+                url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
+            },
+            {
+                id: 'video-5',
+                title: "One Piece - Wano Arc",
+                thumbnail: "https://picsum.photos/seed/anime5/600/400.jpg",
+                duration: "22:50",
+                views: "1.5M",
+                url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4"
+            },
+            {
+                id: 'video-6',
+                title: "Jujutsu Kaisen - Season 2",
+                thumbnail: "https://picsum.photos/seed/anime6/600/400.jpg",
+                duration: "23:30",
+                views: "1.1M",
+                url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4"
+            }
+        ];
+        
+        // Save videos to localStorage
+        function saveVideos() {
+            localStorage.setItem('axHubVideos', JSON.stringify(videos));
+        }
+        
+        // Initialize video grid
+        function initVideoGrid() {
+            videoGrid.innerHTML = '';
+            
+            videos.forEach((video) => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.dataset.id = video.id;
+                videoCard.innerHTML = `
+                    <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
+                    <div class="play-overlay">
+                        <div class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-menu">
+                        <div class="menu-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-item delete-video">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <div class="video-meta">
+                            <span><i class="far fa-clock"></i>${video.duration}</span>
+                            <span><i class="far fa-eye"></i>${video.views}</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event to play video
+                const playBtn = videoCard.querySelector('.play-btn');
+                playBtn.addEventListener('click', () => {
+                    playVideo(video.url, video.title);
+                });
+                
+                // Add click event to delete video
+                const deleteBtn = videoCard.querySelector('.delete-video');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showDeleteConfirmation(video.id);
+                });
+                
+                // Add click event to menu button
+                const menuBtn = videoCard.querySelector('.menu-btn');
+                menuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleMenu(videoCard.querySelector('.menu-content'));
+                });
+                
+                videoGrid.appendChild(videoCard);
+            });
+        }
+        
+        // Play video function
+        function playVideo(url, title) {
+            player.src = url;
+            player.setAttribute('title', title);
+            videoPlayer.classList.add('active');
+            player.play();
+        }
+        
+        // Toggle menu
+        function toggleMenu(menuContent) {
+            // Close all other menus first
+            document.querySelectorAll('.menu-content.active').forEach(menu => {
+                if (menu !== menuContent) {
+                    menu.classList.remove('active');
+                }
+            });
+            
+            // Toggle the clicked menu
+            menuContent.classList.toggle('active');
+        }
+        
+        // Show delete confirmation
+        function showDeleteConfirmation(videoId) {
+            overlay.classList.add('active');
+            deleteConfirmation.classList.add('active');
+            
+            // Set up event listener for confirmation
+            confirmDelete.onclick = () => {
+                deleteVideo(videoId);
+                hideDeleteConfirmation();
+            };
+            
+            // Set up event listener for cancellation
+            cancelDelete.onclick = hideDeleteConfirmation;
+        }
+        
+        // Hide delete confirmation
+        function hideDeleteConfirmation() {
+            overlay.classList.remove('active');
+            deleteConfirmation.classList.remove('active');
+        }
+        
+        // Delete video
+        function deleteVideo(videoId) {
+            videos = videos.filter(video => video.id !== videoId);
+            saveVideos();
+            initVideoGrid();
+            
+            notification.textContent = "Video deleted successfully!";
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Toggle admin panel
+        adminBtn.addEventListener('click', () => {
+            adminPanel.classList.add('active');
+        });
+        
+        closePanel.addEventListener('click', () => {
+            adminPanel.classList.remove('active');
+        });
+        
+        // Verify admin password
+        verifyPassword.addEventListener('click', () => {
+            const password = passwordInput.value;
+            
+            if (password === ADMIN_PASSWORD) {
+                passwordForm.style.display = 'none';
+                uploadArea.classList.add('active');
+                uploadForm.classList.add('active');
+                uploadInfo.classList.add('active');
+                notification.textContent = "Admin access granted!";
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            } else {
+                notification.textContent = "Incorrect password! Access denied.";
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+        
+        // Upload button click
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        // Thumbnail upload button click
+        thumbnailUploadBtn.addEventListener('click', () => {
+            thumbnailInput.click();
+        });
+        
+        // Update thumbnail preview when URL changes
+        thumbnailUrl.addEventListener('input', updateThumbnailPreview);
+        
+        // Update thumbnail preview when file is selected
+        thumbnailInput.addEventListener('change', updateThumbnailFromUpload);
+        
+        function updateThumbnailPreview() {
+            const url = thumbnailUrl.value.trim();
+            if (url) {
+                thumbnailPreview.innerHTML = `<img src="${url}" alt="Thumbnail preview">`;
+            } else {
+                thumbnailPreview.innerHTML = `<p class="thumbnail-preview-text">Thumbnail preview will appear here</p>`;
+            }
+        }
+        
+        function updateThumbnailFromUpload() {
+            if (thumbnailInput.files.length > 0) {
+                const file = thumbnailInput.files[0];
+                const url = URL.createObjectURL(file);
+                thumbnailPreview.innerHTML = `<img src="${url}" alt="Thumbnail preview">`;
+            }
+        }
+        
+        // Submit upload
+        submitUpload.addEventListener('click', () => {
+            const title = videoTitle.value.trim() || "Untitled Video";
+            
+            // Get thumbnail from preview or URL input
+            let thumbnail = '';
+            const previewImg = thumbnailPreview.querySelector('img');
+            
+            if (previewImg) {
+                thumbnail = previewImg.src;
+            } else if (thumbnailUrl.value.trim()) {
+                thumbnail = thumbnailUrl.value.trim();
+            } else {
+                thumbnail = `https://picsum.photos/seed/${Math.random().toString(36).substring(7)}/600/400.jpg`;
+            }
+            
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                
+                // Check if it's an MP4 file
+                if (file.type === 'video/mp4') {
+                    // Create a new video object
+                    const newVideo = {
+                        id: 'video-' + Date.now(), // Unique ID
+                        title: title,
+                        thumbnail: thumbnail,
+                        duration: "00:00", // Would be calculated from actual video
+                        views: "0",
+                        url: URL.createObjectURL(file) // Create a temporary URL for the uploaded file
+                    };
+                    
+                    // Add the new video to the beginning of the array
+                    videos.unshift(newVideo);
+                    
+                    // Save to localStorage
+                    saveVideos();
+                    
+                    // Reinitialize the grid to show the new video instantly
+                    initVideoGrid();
+                    
+                    // Show notification
+                    notification.textContent = "Video uploaded successfully!";
+                    notification.classList.add('show');
+                    
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 3000);
+                    
+                    // Reset form
+                    videoTitle.value = '';
+                    thumbnailUrl.value = '';
+                    thumbnailPreview.innerHTML = `<p class="thumbnail-preview-text">Thumbnail preview will appear here</p>`;
+                    fileInput.value = '';
+                } else {
+                    notification.textContent = "Please upload an MP4 video file.";
+                    notification.classList.add('show');
+                    
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 3000);
+                }
+            } else {
+                notification.textContent = "Please select a video file to upload.";
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+        
+        // Close admin panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!adminPanel.contains(e.target) && e.target !== adminBtn && adminPanel.classList.contains('active')) {
+                adminPanel.classList.remove('active');
+            }
+            
+            // Close menu when clicking outside
+            if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-content')) {
+                document.querySelectorAll('.menu-content.active').forEach(menu => {
+                    menu.classList.remove('active');
+                });
+            }
+        });
+        
+        // Close video player when clicking outside
+        videoPlayer.addEventListener('click', (e) => {
+            if (e.target === videoPlayer) {
+                videoPlayer.classList.remove('active');
+                player.pause();
+                player.src = '';
+            }
+        });
+        
+        // Close delete confirmation when clicking outside
+        overlay.addEventListener('click', hideDeleteConfirmation);
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            // Revoke object URLs to prevent memory leaks
+            videos.forEach(video => {
+                if (video.url.startsWith('blob:')) {
+                    URL.revokeObjectURL(video.url);
+                }
+            });
+        });
+        
+        // Initialize the page
+        window.addEventListener('DOMContentLoaded', () => {
+            initVideoGrid();
+        });
+    </script>
+</body>
+</html>
